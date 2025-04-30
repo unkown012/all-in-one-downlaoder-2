@@ -1,7 +1,5 @@
 const { IgApiClient } = require('instagram-private-api');
 const axios = require('axios');
-const fs = require('fs');
-const path = require('path');
 
 class InstagramService {
     constructor() {
@@ -28,22 +26,16 @@ class InstagramService {
 
             // Get media info
             const mediaInfo = await this.ig.media.info(mediaId);
-            const downloadDir = path.join(__dirname, '../public/downloads');
             
-            if (!fs.existsSync(downloadDir)) {
-                fs.mkdirSync(downloadDir, { recursive: true });
-            }
-
-            // Handle different types of media
             if (mediaInfo.items[0].carousel_media) {
                 // Handle carousel/multiple media
-                return await this.downloadCarousel(mediaInfo.items[0], downloadDir);
+                return await this.downloadCarousel(mediaInfo.items[0]);
             } else if (mediaInfo.items[0].video_versions) {
                 // Handle video
-                return await this.downloadVideo(mediaInfo.items[0], downloadDir);
+                return await this.downloadVideo(mediaInfo.items[0]);
             } else {
                 // Handle single image
-                return await this.downloadImage(mediaInfo.items[0], downloadDir);
+                return await this.downloadImage(mediaInfo.items[0]);
             }
         } catch (error) {
             console.error('Error downloading Instagram content:', error);
@@ -51,54 +43,44 @@ class InstagramService {
         }
     }
 
-    async downloadImage(mediaItem, downloadDir) {
+    async downloadImage(mediaItem) {
         const url = mediaItem.image_versions2.candidates[0].url;
-        const filename = `instagram_${mediaItem.id}.jpg`;
-        const filepath = path.join(downloadDir, filename);
-        
         const response = await axios({
             url,
             method: 'GET',
-            responseType: 'stream'
+            responseType: 'arraybuffer'
         });
 
-        const writer = fs.createWriteStream(filepath);
-        response.data.pipe(writer);
-
-        return new Promise((resolve, reject) => {
-            writer.on('finish', () => resolve(filepath));
-            writer.on('error', reject);
-        });
+        return {
+            buffer: response.data,
+            filename: `instagram_${mediaItem.id}.jpg`,
+            type: 'image/jpeg'
+        };
     }
 
-    async downloadVideo(mediaItem, downloadDir) {
+    async downloadVideo(mediaItem) {
         const url = mediaItem.video_versions[0].url;
-        const filename = `instagram_${mediaItem.id}.mp4`;
-        const filepath = path.join(downloadDir, filename);
-
         const response = await axios({
             url,
             method: 'GET',
-            responseType: 'stream'
+            responseType: 'arraybuffer'
         });
 
-        const writer = fs.createWriteStream(filepath);
-        response.data.pipe(writer);
-
-        return new Promise((resolve, reject) => {
-            writer.on('finish', () => resolve(filepath));
-            writer.on('error', reject);
-        });
+        return {
+            buffer: response.data,
+            filename: `instagram_${mediaItem.id}.mp4`,
+            type: 'video/mp4'
+        };
     }
 
-    async downloadCarousel(mediaItem, downloadDir) {
+    async downloadCarousel(mediaItem) {
         const files = [];
         for (let i = 0; i < mediaItem.carousel_media.length; i++) {
             const carouselItem = mediaItem.carousel_media[i];
             if (carouselItem.video_versions) {
-                files.push(await this.downloadVideo(carouselItem, downloadDir));
+                files.push(await this.downloadVideo(carouselItem));
             } else {
-                files.push(await this.downloadImage(carouselItem, downloadDir));
+                files.push(await this.downloadImage(carouselItem));
             }
         }
         return files;
