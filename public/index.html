@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Downloader Pro - For Personal Use Only</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-download"></i> Media Downloader Pro</h1>
+            <p>Download media from various social media platforms</p>
+            <div class="legal-notice">
+                <p><i class="fas fa-exclamation-triangle"></i> For Personal Use Only</p>
+                <p class="legal-text">By using this tool, you agree to use it for personal purposes only and respect copyright laws.</p>
+            </div>
+            <button id="dark-mode-toggle" class="theme-toggle">
+                <i class="fas fa-moon"></i> Dark Mode
+            </button>
+        </header>
+
+        <main>
+            <!-- YouTube Section -->
+            <section class="platform-section">
+                <h2><i class="fab fa-youtube"></i> YouTube</h2>
+                <div class="url-drop-zone" id="youtube-drop-zone">
+                    <p>Drag and drop YouTube URLs here</p>
+                    <div class="url-list" id="youtube-url-list"></div>
+                </div>
+                <div class="input-group">
+                    <div class="input-wrapper">
+                        <input type="text" id="youtube-url" placeholder="Enter YouTube URL">
+                        <div class="error-text">Please enter a valid YouTube URL</div>
+                    </div>
+                    <select id="youtube-format">
+                        <option value="mp4">MP4 Video</option>
+                        <option value="mp3">MP3 Audio</option>
+                    </select>
+                    <button onclick="downloadYouTube()" id="youtube-btn">
+                        <i class="fas fa-download"></i> Download
+                    </button>
+                </div>
+                <div class="quality-selector" id="youtube-quality">
+                    <div class="quality-option" data-quality="1080">1080p</div>
+                    <div class="quality-option" data-quality="720">720p</div>
+                    <div class="quality-option" data-quality="480">480p</div>
+                    <div class="quality-option" data-quality="360">360p</div>
+                </div>
+                <div class="progress-container" id="youtube-progress">
+                    <div class="progress-bar"></div>
+                </div>
+            </section>
+
+            <!-- Instagram Section -->
+            <section class="platform-section">
+                <h2><i class="fab fa-instagram"></i> Instagram</h2>
+                <div class="url-drop-zone" id="instagram-drop-zone">
+                    <p>Drag and drop Instagram URLs here</p>
+                    <div class="url-list" id="instagram-url-list"></div>
+                </div>
+                <div class="input-group">
+                    <div class="input-wrapper">
+                        <input type="text" id="instagram-url" placeholder="Enter Instagram URL">
+                        <div class="error-text">Please enter a valid Instagram URL</div>
+                    </div>
+                    <button onclick="downloadInstagram()" id="instagram-btn">
+                        <i class="fas fa-download"></i> Download
+                    </button>
+                </div>
+                <div class="progress-container" id="instagram-progress">
+                    <div class="progress-bar"></div>
+                </div>
+            </section>
+
+            <!-- Twitter Section -->
+            <section class="platform-section">
+                <h2><i class="fab fa-twitter"></i> Twitter</h2>
+                <div class="url-drop-zone" id="twitter-drop-zone">
+                    <p>Drag and drop Twitter URLs here</p>
+                    <div class="url-list" id="twitter-url-list"></div>
+                </div>
+                <div class="input-group">
+                    <div class="input-wrapper">
+                        <input type="text" id="twitter-url" placeholder="Enter Twitter URL">
+                        <div class="error-text">Please enter a valid Twitter URL</div>
+                    </div>
+                    <button onclick="downloadTwitter()" id="twitter-btn">
+                        <i class="fas fa-download"></i> Download
+                    </button>
+                </div>
+                <div class="progress-container" id="twitter-progress">
+                    <div class="progress-bar"></div>
+                </div>
+            </section>
+
+            <!-- Facebook Section -->
+            <section class="platform-section">
+                <h2><i class="fab fa-facebook"></i> Facebook</h2>
+                <div class="url-drop-zone" id="facebook-drop-zone">
+                    <p>Drag and drop Facebook URLs here</p>
+                    <div class="url-list" id="facebook-url-list"></div>
+                </div>
+                <div class="input-group">
+                    <div class="input-wrapper">
+                        <input type="text" id="facebook-url" placeholder="Enter Facebook URL">
+                        <div class="error-text">Please enter a valid Facebook URL</div>
+                    </div>
+                    <button onclick="downloadFacebook()" id="facebook-btn">
+                        <i class="fas fa-download"></i> Download
+                    </button>
+                </div>
+                <div class="progress-container" id="facebook-progress">
+                    <div class="progress-bar"></div>
+                </div>
+            </section>
+
+            <!-- WhatsApp Section -->
+            <section class="platform-section">
+                <h2><i class="fab fa-whatsapp"></i> WhatsApp Status</h2>
+                <div class="drag-drop-zone" id="whatsapp-drop-zone">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Drag and drop files here</p>
+                    <p class="file-info">or click to select files</p>
+                    <p class="supported-formats">Supported formats: JPG, PNG, GIF, MP4</p>
+                </div>
+                <div class="input-group">
+                    <div class="input-wrapper">
+                        <input type="file" id="whatsapp-file" accept="image/*,video/*" style="display: none;">
+                        <div class="error-text">Please select a valid file</div>
+                    </div>
+                    <button onclick="uploadWhatsApp()" id="whatsapp-btn">
+                        <i class="fas fa-upload"></i> Upload
+                    </button>
+                </div>
+                <div class="progress-container" id="whatsapp-progress">
+                    <div class="progress-bar"></div>
+                </div>
+            </section>
+
+            <!-- Batch Download Section -->
+            <section class="batch-download">
+                <h2><i class="fas fa-list"></i> Batch Download</h2>
+                <div class="drag-drop-zone" id="batch-drop-zone">
+                    <i class="fas fa-file-alt"></i>
+                    <p>Drag and drop a text file with URLs</p>
+                    <p class="file-info">or paste URLs below</p>
+                    <p class="supported-formats">One URL per line</p>
+                </div>
+                <textarea class="batch-input" id="batch-urls" placeholder="Enter multiple URLs (one per line)"></textarea>
+                <button onclick="startBatchDownload()" id="batch-btn">
+                    <i class="fas fa-download"></i> Start Batch Download
+                </button>
+            </section>
+
+            <!-- Download History Section -->
+            <section class="history-section">
+                <h2><i class="fas fa-history"></i> Download History</h2>
+                <div id="download-history"></div>
+            </section>
+        </main>
+
+        <!-- Download Queue -->
+        <div class="download-queue" id="download-queue">
+            <div class="queue-header">
+                <span class="queue-title">Download Queue</span>
+                <span class="queue-count">0</span>
+            </div>
+            <div id="queue-items"></div>
+        </div>
+
+        <footer class="legal-footer">
+            <p>© 2024 Media Downloader Pro. All rights reserved.</p>
+            <p>This tool is for personal use only. Please respect copyright laws and intellectual property rights.</p>
+            <p>By using this tool, you agree to our <a href="#" onclick="showTerms()">Terms of Use</a> and <a href="#" onclick="showPrivacy()">Privacy Policy</a>.</p>
+        </footer>
+
+        <!-- Legal Modals -->
+        <div id="terms-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Terms of Use</h2>
+                <div class="modal-body">
+                    <p>By using this application, you agree to:</p>
+                    <ul>
+                        <li>Use the tool for personal purposes only</li>
+                        <li>Not use it for any commercial purposes</li>
+                        <li>Not redistribute or resell downloaded content</li>
+                        <li>Not use it to download copyrighted material without proper authorization</li>
+                        <li>Not use it for any illegal purposes</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="privacy-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Privacy Policy</h2>
+                <div class="modal-body">
+                    <p>We do not store any downloaded content on our servers. All downloads are processed directly and temporarily. We only store:</p>
+                    <ul>
+                        <li>Download history (locally in your browser)</li>
+                        <li>Basic usage statistics (anonymized)</li>
+                        <li>Error logs (for debugging purposes)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="message" class="message"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html> 
